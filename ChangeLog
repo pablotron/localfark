@@ -66,3 +66,5 @@
   * added web/images/lf-title-grad.png
   * web/style.css: switch titlebar background
 
+* Sun Jan 11 22:26:51 2004, pabs <pabs@pablotron.org>
+  * localfark.rb: 1.8 updates

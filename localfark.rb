@@ -98,7 +98,7 @@ end
 #######################################################################
 
 # load config file
-CONFIG_PATH = ENV['HOME'] << '/.localfark.rb'
+CONFIG_PATH = ENV['HOME'] + '/.localfark.rb'
 unless test ?e, CONFIG_PATH
   $stderr.puts 'Missing "$HOME/.localfark.rb".  Please read README.'
   exit -1
@@ -145,7 +145,7 @@ puts "Grabbed date: #$date" if $config[:verbose]
 links = []
 puts 'Scanning links...' if $config[:verbose]
 hour = '00'
-tf.scan(/(\d+:\d+ hours)|<td class="nilink" align=right width="120"><a onMouseOver="window.status='([^']+?)' ; return true;" onMouseOut="window.status=''; return true;" href="[^"]+" target=_blank>(.+?)<\/a><\/td>\s<td class="nilink" align=center width=38><IMG SRC="[^"]+" WIDTH=54 HEIGHT=11 ALT="\[([^\]]+)]"><\/td>\s<td class="nilink" align=left>(<font color="#\d{6}">)?([^<]+?)(<\/font>)?<\/td>\s<td class="nilink" align=center width=64><a href="([^"]+?)">/m) { |hours, url, src, type, font, desc, term_font, forum|
+tf.scan(/(\d+:\d+ hours)|<td class="nilink" align=right width="120"><a onMouseOver="window.status='([^']+?)' ; return true;" onMouseOut="window.status=''; return true;" href="[^"]+" target=_blank>(.+?)<\/a><\/td>\s<td class="nilink" align=center width=38><IMG SRC="[^"]+" WIDTH=54 HEIGHT=11 ALT="\[([^\]]+)\]"><\/td>\s<td class="nilink" align=left>(<font color="#\d{6}">)?([^<]+?)(<\/font>)?<\/td>\s<td class="nilink" align=center width=64><a href="([^"]+?)">/m) { |hours, url, src, type, font, desc, term_font, forum|
   if hours =~ /(\d+):\d+ hours/
     hour = $1
   else
