@@ -85,3 +85,6 @@
 
 * Thu Jan 15 23:30:33 2004, pabs <pabs@pablotron.org>
   * localfark.rb: really fix date stuff
+
+* Mon Jan 19 19:46:52 2004, pabs <pabs@pablotron.org>
+  * switch to case insensitive for evil regex

@@ -131,7 +131,7 @@ end
 # scan links; warning PURE EVIL REGEX AHEAD ;)
 links = []
 puts 'Scanning links...' if $config[:verbose]
-tf.scan(/(\w{3} \w+ \d+, \d{4}, \d+:\d{2}) hours:|<td class="nilink" align=right width="120"><a onMouseOver="window.status='([^']+?)' ; return true;" onMouseOut="window.status=''; return true;" href="[^"]+" target=_blank>(.+?)<\/a><\/td>\s<td class="nilink" align=center width=38><IMG SRC="[^"]+" WIDTH=54 HEIGHT=11 ALT="\[([^\]]+)\]"><\/td>\s<td class="nilink" align=left>(<font color="#\d{6}">)?([^<]+?)(<\/font>)?<\/td>\s<td class="nilink" align=center width=64><a href="([^"]+?)">/m) { |hours, url, src, type, font, desc, term_font, forum|
+tf.scan(/(\w{3} \w+ \d+, \d{4}, \d+:\d{2}) hours:|<td class="nilink" align=right width="120"><a onMouseOver="window.status='([^']+?)' ; return true;" onMouseOut="window.status=''; return true;" href="[^"]+" target=_blank>(.+?)<\/a><\/td>\s<td class="nilink" align=center width=38><IMG SRC="[^"]+" WIDTH=54 HEIGHT=11 ALT="\[([^\]]+)\]"><\/td>\s<td class="nilink" align=left>(<font color="#\d{6}">)?([^<]+?)(<\/font>)?<\/td>\s<td class="nilink" align=center width=64><a href="([^"]+?)">/mi) { |hours, url, src, type, font, desc, term_font, forum|
   if hours =~ /\w{3} \w+ \d+, \d{4}, \d+:\d{2}/
     $date = '%04d-%02d-%02d %02d:%02d:%02d' % ParseDate::parsedate(hours)
     puts "Grabbed date: #{$date}" if $config[:verbose]
