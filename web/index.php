@@ -2,13 +2,13 @@
 
 $DB_OPTS = array(
   'user'  => 'pabs',
-  'pass'  => 'PASSWORD',
+  'pass'  => 'p3p51',
   'host'  => 'localhost',
-  'db'    => 'DB_NAME',
+  'db'    => 'pablotron',
   'table' => 'localfark',
 );
 
-function draw_nav() {
+function draw_nav($draw_page_index = false) {
   global $sort, $max, $order, $ofs, $num_rows;
   $base = "?sort=$sort&amp;max=$max&amp;order=$order&amp;ofs=";
 
@@ -22,6 +22,19 @@ function draw_nav() {
     echo "<a href='$base" . ($ofs + $max) . "'>Next</a>\n";
   else
     echo "<u>Next</u>\n";
+
+  if ($draw_page_index) {
+    echo "<div class='page-index'>Page: \n";
+    $page = 1;
+    for ($i = 0; $i < $num_rows; $i += $max) {
+      if ($ofs >= $i && $ofs < $i + $max)
+        echo "<u>$page</u> \n";
+      else
+        echo "<a href='$base" . $i . "'>$page</a> \n";
+      $page++;
+    }
+    echo "</div>";
+  }
 
   echo "</div>\n";
 }
@@ -66,30 +79,32 @@ echo "<?xml version='1.0' encoding='iso-8859-1'?>\n";
 
   <body>
     <div class='titlebar'>
-      <h1 class='title'>LocalFark</h1>
+      <a class='title' href='.'>LocalFark</a>
       <div class='subtitle'>Impatience is a virtue.</div>
     </div>
 
-    <form action='.' method='get'>
-      Display
-      <input type='entry' size='3' name='max' value='<? echo $max; ?>' />
-      results, sorted by 
-      <?php
-      $order_vals = array('DESC'  => 'Descending',
-                          ' '     => 'Ascending');
-      draw_select('order', &$order_vals);
+    <div class='sortbar'>
+      <form id='sortform' action='.' method='get'>
+        Display
+        <input type='entry' size='3' name='max' value='<? echo $max; ?>' />
+        results, sorted by 
+        <?php
+        $order_vals = array('DESC'  => 'Descending',
+                            ' '     => 'Ascending');
+        draw_select('order', &$order_vals);
 
-      $sort_vals = array('Time'         => 'Time',
-                         'Id'           => 'ID',
-                         'Type'         => 'Type',
-                         'Source'       => 'Source',
-                         'Description'  => 'Description');
-      draw_select('sort', &$sort_vals);
-      ?>.
-      Filter on
-      <input type='entry' name='filter' value='<?php echo $filter ?>' />
-      <input type='submit' name='submit' value='Refresh' />
-    </form>
+        $sort_vals = array('Time'         => 'Time',
+                           'Id'           => 'ID',
+                           'Type'         => 'Type',
+                           'Source'       => 'Source',
+                           'Description'  => 'Description');
+        draw_select('sort', &$sort_vals);
+        ?>.
+        Filter on
+        <input type='entry' name='filter' value='<?php echo $filter ?>' />
+        <input type='submit' name='submit' value='Refresh' />
+      </form>
+    </div>
 
 <?php
     # sanitize values
@@ -146,7 +161,7 @@ echo "<?xml version='1.0' encoding='iso-8859-1'?>\n";
 ?>
     </table>
 
-  <?php draw_nav(); ?>
+  <?php draw_nav(true); ?>
 
   </body>
 </html>

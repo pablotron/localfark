@@ -11,3 +11,7 @@
 * Thu Aug 28 08:32:45 2003, pabs <pabs@pablotron.org>
   * config/fark.rb: change db username and pass to INSERT_* equiv
   * config/totalfark.rb: ditto
+
+* Thu Aug 28 09:12:56 2003, pabs <pabs@pablotron.org>
+  * web/index.php: added page index
+  * web/style.css: styles for page index and sort bar
