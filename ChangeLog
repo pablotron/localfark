@@ -51,3 +51,8 @@
 
 * Mon Sep 01 20:01:08 2003, pabs <pabs@pablotron.org>
   * added web/config.php
+
+* Mon Sep 01 20:13:33 2003, pabs <pabs@pablotron.org>
+  * web/config.php: slightly cleaner config setup (incompatible with
+    old config syntax)
+  * web/index.php: updated to use new config.php 

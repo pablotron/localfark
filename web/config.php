@@ -4,16 +4,24 @@
 # config.php - localfark web interface config file                      #
 #########################################################################
 
-# show the forum?
-$SHOW_FORUM_LINK = false;
+$LOCALFARK_CONFIG = array(
+  # default sort options
+  'sort'  => 'Time',
+  'max'   => 100,
+  'order' => 'DESC',
+  'ofs'   => 0,
 
-# database options
-$DB_OPTS = array(
-  'user'  => 'USER',
-  'pass'  => 'PASS',
-  'host'  => 'localhost',
-  'db'    => 'DB',
-  'table' => 'TABLE',
+  # database options
+  'db'  => array(
+    'user'  => 'user',
+    'pass'  => 'pass',
+    'host'  => 'localhost',
+    'db'    => 'db',
+    'table' => 'table',
+  ),
+
+  # show forum link?
+  'show_comments_link' => false,
 );
 
 ?>

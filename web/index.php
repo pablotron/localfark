@@ -70,24 +70,28 @@ function draw_select($title, $options) {
   echo "</select>\n\n";
 }
 
+function db_connect($opts) {
+  $db = mysql_connect($opts['host'], $opts['user'], $opts['pass']) or
+    die(__LINE__ . ": Couldn't connect to db: " . mysql_error() . ".\n");
+  mysql_select_db($opts['db'], $db) or
+    die(__LINE__ . ": Couldn't select db: " . mysql_error() . ".\n");
+
+  return $db;
+}
+
+#######################################################################
+#######################################################################
+
 # load config file
 require 'config.php';
 
 # set default values
-if (!isset($sort))
-  $sort = 'Time';
-if (!isset($max))
-  $max = 100;
-if (!isset($order))
-  $order = 'DESC';
-if (!isset($ofs))
-  $ofs = 0;
+$keys = array('sort', 'max', 'order', 'ofs');
+foreach ($keys as $i => $val)
+  if (!$GLOBALS[$val])
+    $GLOBALS[$val] = $LOCALFARK_CONFIG[$val];
 
-# connect to db
-$db = mysql_connect($DB_OPTS['host'], $DB_OPTS['user'], $DB_OPTS['pass']) or
-  die(__LINE__ . ": Couldn't connect to db: " . mysql_error() . ".\n");
-mysql_select_db($DB_OPTS['db'], $db) or
-  die(__LINE__ . ": Couldn't select db: " . mysql_error() . ".\n");
+$db = db_connect($LOCALFARK_CONFIG['db']);
 
 echo "<?xml version='1.0' encoding='iso-8859-1'?>\n"; 
 ?>
@@ -138,7 +142,7 @@ echo "<?xml version='1.0' encoding='iso-8859-1'?>\n";
     $max = preg_match('/^\d+$/', $max) ? $max : 100;
 
     # build query
-    $table = $DB_OPTS['table'];
+    $table = $LOCALFARK_CONFIG['db']['table'];
     $query = "SELECT Type,Time,Source,Description,Url,Status,Forum FROM $table";
     $limit = "ORDER BY $sort $order LIMIT $ofs, $max";
     if ($filter) {
@@ -180,7 +184,7 @@ echo "<?xml version='1.0' encoding='iso-8859-1'?>\n";
            "  <td class='time'>" . $time . "</td>\n" .
            "  <td class='desc-$status'>" . $o->Description . "</td>\n" .
            "  <td class='url'><a href='" . $o->Url . "'>Go</a>\n";
-      if ($SHOW_FORUM_LINK)
+      if ($LOCALFARK_CONFIG['show_comments_link'])
         echo "<a class='url' href='" . $o->Forum . "'>Comments</a>\n";
       echo "</td>\n</tr>\n";
     }
