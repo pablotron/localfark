@@ -18,10 +18,10 @@ $config = {
   # database settings
   :use_db?    => true,
   :db         => {
-    :user       => 'pabs',
-    :pass       => 'PASSWORD',
+    :user       => 'INSERT_DB_USER',
+    :pass       => 'INSERT_DB_PASSWORD',
     :host       => 'localhost',
-    :db         => 'pablotron',
+    :db         => 'INSERT_DB_NAME',
     :table      => 'localfark',
   },
 
