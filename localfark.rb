@@ -147,6 +147,7 @@ tf.scan(/(\d+:\d+ hours)|<td class="nilink" align=right width="120"><a onMouseOv
       end
     src.gsub!(/http:\/\/img.fark.com\//, '') if src =~ /http:\/\/img.fark.com\//
     url.gsub!(/%3f/, '?') if url =~ /%3f/
+    url.gsub!(/%26/, '&') if url =~ /%26/
 
     links << FarkLink.new(url, src, type, desc, forum, hour, status)
   end

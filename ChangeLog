@@ -15,3 +15,6 @@
 * Thu Aug 28 09:12:56 2003, pabs <pabs@pablotron.org>
   * web/index.php: added page index
   * web/style.css: styles for page index and sort bar
+
+* Thu Aug 28 09:16:42 2003, pabs <pabs@pablotron.org>
+  * localfark.rb: unescape & in URL as well
