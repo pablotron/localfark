@@ -29,6 +29,8 @@
 #                                                                       #
 #########################################################################
 
+$LOCALFARK_VERSION = '0.2.0';
+
 function draw_nav($draw_page_index = false) {
   global $sort, $max, $order, $ofs, $num_rows;
   $base = "?sort=$sort&amp;max=$max&amp;order=$order&amp;ofs=";

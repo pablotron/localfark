@@ -56,3 +56,8 @@
   * web/config.php: slightly cleaner config setup (incompatible with
     old config syntax)
   * web/index.php: updated to use new config.php 
+
+* Mon Sep 01 20:22:09 2003, pabs <pabs@pablotron.org>
+  * web/index.php: add $LOCALFARK_VERSION
+  * README: merge changes from 0.1.3
+  * increment versoin number to 0.2.0 everywhere
