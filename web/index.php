@@ -29,7 +29,7 @@
 #                                                                       #
 #########################################################################
 
-$LOCALFARK_VERSION = '0.2.0';
+$LOCALFARK_VERSION = '0.3.0';
 
 function draw_nav($draw_page_index = false) {
   global $sort, $max, $order, $ofs, $num_rows;

@@ -4,7 +4,7 @@
 # localfark.rb - scrape totalfark.com and save it to a RSS file and/or  #
 # a MySQL database                                                      #
 #                                                                       #
-# Copyright (C) 2003 Paul Duncan, and various contributors.             #
+# Copyright (C) 2003,2004 Paul Duncan, and various contributors.        #
 #                                                                       #
 # Permission is hereby granted, free of charge, to any person           #
 # obtaining a copy of this software and associated documentation files  #
@@ -30,7 +30,7 @@
 #                                                                       #
 #########################################################################
 
-$LOCALFARK_VERSION = '0.2.0'
+$LOCALFARK_VERSION = '0.3.0'
 
 require 'parsedate'
 
@@ -47,18 +47,14 @@ end
 class FarkLink
   attr_accessor :url, :status
 
-  def initialize(url, src, type, desc, forum, hour, status)
+  def initialize(url, src, type, desc, forum, date, status)
     @url = url
     @src = src
     @type = type
     @desc = desc
     @forum = forum
-    @hour = hour
+    @date = date
     @status = status
-  end
-
-  def time
-    '%s %02d:00:00' % [$date, @hour]
   end
 
   def to_sql(table)
@@ -66,14 +62,13 @@ class FarkLink
     "VALUES " <<
     "('#{Mysql::escape_string(@url)}', '#{Mysql::escape_string(@src)}', " <<
     "'#{Mysql::escape_string(@type)}', '#{Mysql::escape_string(@desc)}', " <<
-    "'#{Mysql::escape_string(@forum)}', '#{Mysql::escape_string(time)}', " <<
-    "'#{@status}')"
+    "'#{Mysql::escape_string(@forum)}', '#{@date}', '#{@status}')"
   end
 
   def to_rss
     ['  <item>',
      "    <title>#{@type}: #{@desc}</title>",
-     "    <date>#{time}</date>",
+     "    <date>#{@date}</date>",
      "    <link>#{@url}</link>", 
      '    <description>',
      "      &lt;p&gt;#{@desc.escape_html}&lt;/p&gt;",
@@ -133,21 +128,13 @@ else
   IO::popen(cmd, 'r') { |io| tf = io.readlines.join '' }
 end
 
-# get date
-date_ary = nil
-dates = tf.scan(/<td class="dateheader" align=left width="33%">([^:<]+):<\/td>/)
-dates.each { |date| puts date }
-date_ary = ParseDate::parsedate(dates[0][0])
-$date = '%04d-%02d-%02d' % date_ary
-puts "Grabbed date: #$date" if $config[:verbose]
-
 # scan links; warning PURE EVIL REGEX AHEAD ;)
 links = []
 puts 'Scanning links...' if $config[:verbose]
-hour = '00'
-tf.scan(/(\d+:\d+ hours)|<td class="nilink" align=right width="120"><a onMouseOver="window.status='([^']+?)' ; return true;" onMouseOut="window.status=''; return true;" href="[^"]+" target=_blank>(.+?)<\/a><\/td>\s<td class="nilink" align=center width=38><IMG SRC="[^"]+" WIDTH=54 HEIGHT=11 ALT="\[([^\]]+)\]"><\/td>\s<td class="nilink" align=left>(<font color="#\d{6}">)?([^<]+?)(<\/font>)?<\/td>\s<td class="nilink" align=center width=64><a href="([^"]+?)">/m) { |hours, url, src, type, font, desc, term_font, forum|
-  if hours =~ /(\d+):\d+ hours/
-    hour = $1
+tf.scan(/(\w{3} \w+ \d+, \d{4}, \d+:\d{2}) hours:|<td class="nilink" align=right width="120"><a onMouseOver="window.status='([^']+?)' ; return true;" onMouseOut="window.status=''; return true;" href="[^"]+" target=_blank>(.+?)<\/a><\/td>\s<td class="nilink" align=center width=38><IMG SRC="[^"]+" WIDTH=54 HEIGHT=11 ALT="\[([^\]]+)\]"><\/td>\s<td class="nilink" align=left>(<font color="#\d{6}">)?([^<]+?)(<\/font>)?<\/td>\s<td class="nilink" align=center width=64><a href="([^"]+?)">/m) { |hours, url, src, type, font, desc, term_font, forum|
+  if hours =~ /\w{3} \w+ \d+, \d{4}, \d+:\d{2}/
+    date = '%04d-%02d-%02d %02d:%02d:%02d' % ParseDate::parsedate(hours)
+    puts "Grabbed date: #{date}" if $config[:verbose]
   else
     status = if font
         if font =~ /"#800000"/
@@ -164,26 +151,29 @@ tf.scan(/(\d+:\d+ hours)|<td class="nilink" align=right width="120"><a onMouseOv
     url.gsub!(/%3f/, '?') if url =~ /%3f/
     url.gsub!(/%26/, '&') if url =~ /%26/
 
-    links << FarkLink.new(url, src, type, desc, forum, hour, status)
+    links << FarkLink.new(url, src, type, desc, forum, date, status)
   end
 }
 
 # save to database
 if $config[:use_db?]
   puts 'Inserting links into database...' % links.size if $config[:verbose]
-  inserted = 0
+  inserted, updated = 0, 0
   links.each { |link|
     if has_url?(db, DB[:table], link.url)
-      db.query "UPDATE %s SET Status = '%s' WHERE Url = '%s'" %
+      db.query "UPDATE %s SET Status = '%s',Time = '%s' WHERE Url = '%s'" %
                [DB[:table], 
                 Mysql::escape_string(link.status),
+                Mysql::escape_string(link.date),
                 Mysql::escape_string(link.url)]
+      updated += 1
     else 
       db.query link.to_sql(DB[:table]) 
       inserted += 1
     end
   }
-  puts 'Inserted %d of %d links into database.' % [inserted, links.size] if $config[:verbose]
+  puts 'Inserted %d and updated %d of %d links.' %
+       [inserted, updated, links.size] if $config[:verbose]
 end
 
 # save to rss file
