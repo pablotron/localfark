@@ -30,9 +30,19 @@
 #                                                                       #
 #########################################################################
 
-$LOCALFARK_VERSION = '0.2.0'
+$LOCALFARK_VERSION = '0.1.2'
 
 require 'parsedate'
+
+class String
+  def escape_html
+    str = self.dup
+    str.gsub!(/&/, '&amp;') if str =~ /&/
+    str.gsub!(/</, '&lt;') if str =~ /</
+    str.gsub!(/>/, '&gt;') if str =~ />/
+    str
+  end
+end
 
 class FarkLink
   attr_accessor :url, :status
@@ -48,7 +58,7 @@ class FarkLink
   end
 
   def time
-    "#$date #{Mysql::escape_string('%02d' % @hour)}:00:00"
+    '%s %02d:00:00' % [$date, @hour]
   end
 
   def to_sql(table)
@@ -56,7 +66,8 @@ class FarkLink
     "VALUES " <<
     "('#{Mysql::escape_string(@url)}', '#{Mysql::escape_string(@src)}', " <<
     "'#{Mysql::escape_string(@type)}', '#{Mysql::escape_string(@desc)}', " <<
-    "'#{Mysql::escape_string(@forum)}', '#{time}', '#{@status}')"
+    "'#{Mysql::escape_string(@forum)}', '#{Mysql::escape_string(time)}', " <<
+    "'#{@status}')"
   end
 
   def to_rss
@@ -65,9 +76,11 @@ class FarkLink
      "    <date>#{time}</date>",
      "    <link>#{@url}</link>", 
      '    <description>',
-     "      &lt;p&gt;#{@desc}&lt;/p&gt;",
-     "      &lt;p&gt;&lt;i&gt;Status: #{@status}<br />",
-     "      Source: #{@src}&lt;/i&gt;&lt;/p&gt;",
+     "      &lt;p&gt;#{@desc.escape_html}&lt;/p&gt;",
+     "      &lt;p&gt;&lt;i&gt;&lt;a href='#{@forum}'&gt;Comments&lt;/a&gt;",
+     "      &lt;br /&gt;",
+     "      &lt;p&gt;&lt;i&gt;Status: #{@status}&lt;br /&gt;",
+     "      Source: #{@src.escape_html}&lt;/i&gt;&lt;/p&gt;",
      '    </description>',
      '  </item>',
      '',
@@ -122,7 +135,9 @@ end
 
 # get date
 date_ary = nil
-tf.scan(/<td class="dateheader" align=left width="33%">([^:<]+):<\/td>/) { |str| date_ary = ParseDate::parsedate(str[0]) }
+dates = tf.scan(/<td class="dateheader" align=left width="33%">([^:<]+):<\/td>/)
+dates.each { |date| puts date }
+date_ary = ParseDate::parsedate(dates[0][0])
 $date = '%04d-%02d-%02d' % date_ary
 puts "Grabbed date: #$date" if $config[:verbose]
 

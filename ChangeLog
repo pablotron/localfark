@@ -21,3 +21,30 @@
 
 * Thu Aug 28 19:42:54 2003, pabs <pabs@pablotron.org>
   * localfark.rb: increment version number to 0.2.0
+
+* Sun Aug 31 23:40:30 2003, pabs <pabs@pablotron.org>
+  * localfark.rb: escape HTML in description and source. 
+
+* Sun Aug 31 23:45:50 2003, pabs <pabs@pablotron.org>
+  * localfark.rb: really escape all HTML this time, seriously (this was
+    reported by bma)
+
+* Mon Sep 01 07:45:11 2003, pabs <pabs@pablotron.org>
+  * web/index.php: "</option" => "</option>" (fixes konqueror bug
+    reported by both bma and richlowe)
+  * web/index.php: add forum link
+  * web/index.php: add copyright and warranty notice
+  * web/README: update instructions
+  * added web/config.php
+
+* Mon Sep 01 07:59:16 2003, pabs <pabs@pablotron.org>
+  * localfark.rb: make FarkLink#time work w/o mysql backend loaded
+  * localfark.rb: grab latest date, not all dates
+  * localfark.rb: add comments link to RSS output
+
+* Mon Sep 01 19:16:00 2003, pabs <pabs@pablotron.org>
+  * web/index.php: move require down a little
+
+* Mon Sep 01 19:59:49 2003, pabs <pabs@pablotron.org>
+  * merge in changes from 0.1.3 (everything above after incrementing
+    version number)

@@ -1,12 +1,33 @@
 <?php
 
-$DB_OPTS = array(
-  'user'  => 'pabs',
-  'pass'  => 'p3p51',
-  'host'  => 'localhost',
-  'db'    => 'pablotron',
-  'table' => 'localfark',
-);
+#########################################################################
+# index.php - localfark web interface                                   #
+#                                                                       #
+# Copyright (C) 2003 Paul Duncan, and various contributors.             #
+#                                                                       #
+# Permission is hereby granted, free of charge, to any person           #
+# obtaining a copy of this software and associated documentation files  #
+# (the "Software"), to deal in the Software without restriction,        #
+# including without limitation the rights to use, copy, modify, merge,  #
+# publish, distribute, sublicense, and/or sell copies of the Software,  #
+# and to permit persons to whom the Software is furnished to do so,     #
+# subject to the following conditions:                                  #
+#                                                                       #
+# The above copyright notice and this permission notice shall be        #
+# included in all copies of the Software, its documentation and         #
+# marketing & publicity materials, and acknowledgment shall be given    #
+# in the documentation, materials and software packages that this       #
+# Software was used.                                                    #
+#                                                                       #
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,       #
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF    #
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND                 #
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY      #
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,  #
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE     #
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                #
+#                                                                       #
+#########################################################################
 
 function draw_nav($draw_page_index = false) {
   global $sort, $max, $order, $ofs, $num_rows;
@@ -45,9 +66,12 @@ function draw_select($title, $options) {
   foreach ($options as $key => $val) 
     echo "  <option value='$key'" . 
          (($GLOBALS[$title] == $key) ? ' SELECTED' : '') . 
-         ">$val</option\n";
-  echo '</select>';
+         ">$val</option>\n";
+  echo "</select>\n\n";
 }
+
+# load config file
+require 'config.php';
 
 # set default values
 if (!isset($sort))
@@ -115,7 +139,7 @@ echo "<?xml version='1.0' encoding='iso-8859-1'?>\n";
 
     # build query
     $table = $DB_OPTS['table'];
-    $query = "SELECT Type,Time,Source,Description,Url,Status FROM $table";
+    $query = "SELECT Type,Time,Source,Description,Url,Status,Forum FROM $table";
     $limit = "ORDER BY $sort $order LIMIT $ofs, $max";
     if ($filter) {
       $filter = mysql_escape_string($filter);
@@ -155,8 +179,10 @@ echo "<?xml version='1.0' encoding='iso-8859-1'?>\n";
            ".gif' width='54' height='11' alt='[" . $o->Type . "]' /></td>\n" . 
            "  <td class='time'>" . $time . "</td>\n" .
            "  <td class='desc-$status'>" . $o->Description . "</td>\n" .
-           "  <td class='url'><a href='" . $o->Url . "'>Go</a>\n" .
-           "</tr>\n";
+           "  <td class='url'><a href='" . $o->Url . "'>Go</a>\n";
+      if ($SHOW_FORUM_LINK)
+        echo "<a class='url' href='" . $o->Forum . "'>Comments</a>\n";
+      echo "</td>\n</tr>\n";
     }
 ?>
     </table>

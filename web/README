@@ -1,4 +1,4 @@
 
-web interface to MySQL backend.
-to use this, edit $DB_OPTS at the top of index.php to suite your
-particular configuration.
+Web interface to LocalFark MySQL backend.
+To use this, edit $DB_OPTS in config.php to suite your particular
+configuration.
