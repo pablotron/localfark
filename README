@@ -14,7 +14,7 @@ MySQL database.
 
 System Requirements
 ===================
-- Ruby 1.6.8 (Ruby 1.8 should work as well)
+- Ruby 1.6.8 or newer
   http://www.ruby-lang.org/
 - MySQL-Ruby
   http://www.tmtm.org/en/mysql/ruby/
