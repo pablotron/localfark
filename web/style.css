@@ -21,7 +21,9 @@ a:hover {
 .titlebar {
   margin: 0px;
   padding: 5px;
-  background-color: #ffffdd;
+  /* background-color: #ffffdd; */
+  background-image: url(/images/lf-title-grad.png);
+  background-repeat: repeat-x;
   border-bottom: 1px solid #111111;
   font-family: verdana, arial, helvetica, sans-serif;
   font-color: #111111;
