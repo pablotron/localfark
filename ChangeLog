@@ -82,3 +82,6 @@
   * localfark.rb: update date along with status if link already exists in
                   db
   * web/index.php: increment version to 0.3.0
+
+* Thu Jan 15 23:30:33 2004, pabs <pabs@pablotron.org>
+  * localfark.rb: really fix date stuff

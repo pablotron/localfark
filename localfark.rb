@@ -45,7 +45,7 @@ class String
 end
 
 class FarkLink
-  attr_accessor :url, :status
+  attr_accessor :url, :status, :date
 
   def initialize(url, src, type, desc, forum, date, status)
     @url = url
@@ -133,8 +133,8 @@ links = []
 puts 'Scanning links...' if $config[:verbose]
 tf.scan(/(\w{3} \w+ \d+, \d{4}, \d+:\d{2}) hours:|<td class="nilink" align=right width="120"><a onMouseOver="window.status='([^']+?)' ; return true;" onMouseOut="window.status=''; return true;" href="[^"]+" target=_blank>(.+?)<\/a><\/td>\s<td class="nilink" align=center width=38><IMG SRC="[^"]+" WIDTH=54 HEIGHT=11 ALT="\[([^\]]+)\]"><\/td>\s<td class="nilink" align=left>(<font color="#\d{6}">)?([^<]+?)(<\/font>)?<\/td>\s<td class="nilink" align=center width=64><a href="([^"]+?)">/m) { |hours, url, src, type, font, desc, term_font, forum|
   if hours =~ /\w{3} \w+ \d+, \d{4}, \d+:\d{2}/
-    date = '%04d-%02d-%02d %02d:%02d:%02d' % ParseDate::parsedate(hours)
-    puts "Grabbed date: #{date}" if $config[:verbose]
+    $date = '%04d-%02d-%02d %02d:%02d:%02d' % ParseDate::parsedate(hours)
+    puts "Grabbed date: #{$date}" if $config[:verbose]
   else
     status = if font
         if font =~ /"#800000"/
@@ -151,7 +151,7 @@ tf.scan(/(\w{3} \w+ \d+, \d{4}, \d+:\d{2}) hours:|<td class="nilink" align=right
     url.gsub!(/%3f/, '?') if url =~ /%3f/
     url.gsub!(/%26/, '&') if url =~ /%26/
 
-    links << FarkLink.new(url, src, type, desc, forum, date, status)
+    links << FarkLink.new(url, src, type, desc, forum, $date, status)
   end
 }
 
