@@ -1,0 +1,76 @@
+
+body {
+  margin: 0px;
+  padding: 0px;
+  background: #ffffff;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 12px;
+}
+
+.titlebar {
+  margin: 0px;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #eeeeee;
+  border-bottom: 1px solid #111111;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-color: #111111;
+  font-weight: normal;
+}
+
+.title {
+  padding: 0px;
+  margin: 0px;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-color: #111111;
+  font-weight: normal;
+  font-size: 24px;
+  letter-spacing: 10px;
+}
+
+.subtitle {
+  padding: 0px;
+  margin: 0px;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-color: #111111;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.even-row {
+  background: #eeeeee;
+}
+
+.odd-row {
+  background: #ffffff;
+}
+
+.header {
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.type {
+  font-size: 9px;
+}
+
+.src {
+  font-size: 9px;
+  text-align: right;
+}
+
+.url {
+  font-size: 9px;
+}
+
+.time {
+  font-size: 9px;
+}
+
+.desc-accepted {
+  color: #008000;
+}
+
+.desc-rejected {
+  color: #800000;
+}

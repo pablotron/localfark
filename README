@@ -1,0 +1,50 @@
+LocalFark 0.1.0 README
+======================
+
+This document was last updated on Wed Aug 27 21:28:35 2003.
+
+Introduction
+============
+LocalFark is a screen-scraper for Fark (http://www.fark.com/) and
+TotalFark (http://www.totalfark.com/).  It can save to RSS and/or a
+MySQL database.
+
+
+System Requirements
+===================
+- Ruby 1.6.8 (Ruby 1.8 should work as well)
+  http://www.ruby-lang.org/
+- MySQL-Ruby
+  http://www.tmtm.org/en/mysql/ruby/
+- PHP 4.2.1 (optional, for the web interface)
+  http://www.php.net/
+
+
+Getting Started
+===============
+Take a look at config/fark.rb or config/totalfark.rb, depending on the
+site you want to scrape (TotalFark requires an account; no, you can't
+have mine).  
+
+Once you've customized the template for your particular setup, copy it
+to $HOME/.localfark.rb (LocalFark will complain and exit if this file
+doesn't exist).
+
+To use the MySQL backend, set :use_db? to true in the config file, and
+use the following command to create the LocalFark table:
+
+  # create mysql localfark table
+  mysql -u USER -p DATABASE < localfark.sql
+
+Where USER is your MySQL username, and DATABASE is database to create
+the table under (you'll need to add those settings to your config file
+as well).
+
+By using this scraper, you're denying Fark some advertising revenue.  As
+penance, you might consider going to Fark occasionally and clicking on
+some banners to compensate.
+
+About the Author
+================
+Paul Duncan <pabs@pablotron.org> 
+http://www.pablotron.org/
